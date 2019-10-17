@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>webcam-loopback</title>
+  <style>
+    body,
+    body > #video_container,
+    body > #video_container > video {margin:0; padding:0;}
+    body > #video_container {width:500px; height:375px; margin:1em auto; border:10px #333 solid;}
+    body > #video_container > video {width:100%; height:100%; background-color:#666;}
+  </style>
+
+  <script>
+    const init = function() {
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video: true})
+        .then((stream) => {
+          let container   = document.querySelector('body > #video_container')
+          let video       = container.querySelector(':scope > video')
+
+          try {
+            let track     = stream.getVideoTracks()[0]
+            let settings  = track.getSettings()
+            let width     = settings.width
+            let height    = settings.height
+
+            if (width && height) {
+              container.style.width  = width  + 'px'
+              container.style.height = height + 'px'
+            }
+          }
+          catch (e) {}
+
+        //video.src       = URL.createObjectURL(stream)
+          video.srcObject = stream
+        })
+        .catch((err) => {
+          let video = document.querySelector('body > #video_container > video')
+          video.src = null
+
+          alert(`An error occurred:\n\n${err.message}`)
+          console.log(err.message)
+          console.error(err)
+        })
+      }
+      else {
+        alert('WebRTC is not supported by this web browser')
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="video_container">
+    <video autoplay="true"></video>
+  </div>
+
+  <script>
+    init()
+  </script>
+</body>
+</html>
