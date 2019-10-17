@@ -12,7 +12,7 @@
 
   <script>
     const init = function() {
-      if (navigator.mediaDevices.getUserMedia) {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({video: true})
         .then((stream) => {
           let container   = document.querySelector('body > #video_container')
@@ -35,8 +35,12 @@
           video.srcObject = stream
         })
         .catch((err) => {
-          let video = document.querySelector('body > #video_container > video')
-          video.src = null
+          try {
+            let video       = document.querySelector('body > #video_container > video')
+          //video.src       = null
+            video.srcObject = null
+          }
+          catch(e) {}
 
           alert(`An error occurred:\n\n${err.message}`)
           console.log(err.message)
