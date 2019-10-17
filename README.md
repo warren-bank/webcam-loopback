@@ -16,8 +16,12 @@ Client-side tool to display the video stream from a local webcam
 
 #### Notes:
 
-* offline
+* offline:
   * no internet access is required when `index.html` is locally hosted
+* if permission for access is denied:
+  * most browsers will remember this decision and automatically deny permission on page reload
+  * the user will need to manually clear this setting
+    * in Chrome: `chrome://settings/content/camera`
 
 #### Legal:
 
